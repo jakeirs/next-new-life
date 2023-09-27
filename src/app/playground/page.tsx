@@ -1,7 +1,7 @@
 "use client";
 
+import { getDomain } from "@/lib/getDomain";
 import { useEffect } from "react";
-import { getDomain } from "../lib/getDomain";
 
 interface Props {}
 

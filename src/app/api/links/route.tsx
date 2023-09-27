@@ -1,4 +1,4 @@
-import isValidURL from "@/app/lib/isValidURL";
+import isValidURL from "@/lib/isValidURL";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {

@@ -1,4 +1,4 @@
-import { getDomain } from "../lib/getDomain";
+import { getDomain } from "@/lib/getDomain";
 
 async function getData() {
   const domain = getDomain();

@@ -1,7 +1,7 @@
 "use client";
 
+import { getDomain } from "@/lib/getDomain";
 import { useState } from "react";
-import { getDomain } from "../lib/getDomain";
 
 const endpoint = `${getDomain()}/api/links`;
 
