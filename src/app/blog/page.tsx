@@ -1,5 +1,3 @@
-"use client";
-
 async function getData() {
   const endpoint = "http://localhost:3000/api/playground";
   const res = await fetch(endpoint);
