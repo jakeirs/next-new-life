@@ -6,7 +6,7 @@ interface Props {}
 
 const BlogPage: React.FC<Props> = () => {
   useEffect(() => {
-    fetch("httpss://localhost:3000" + "/api/playground    ", {
+    fetch("http://localhost:3000" + "/api/playground    ", {
       method: "POST",
       body: JSON.stringify({
         product: "Product Siema",
