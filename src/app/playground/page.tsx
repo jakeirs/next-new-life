@@ -7,7 +7,9 @@ interface Props {}
 
 const PlaygroundPage: React.FC<Props> = () => {
   useEffect(() => {
-    fetch(getDomain + "/api/playground    ", {
+    const domain = getDomain();
+
+    fetch(`${domain}/api/playground`, {
       method: "POST",
       body: JSON.stringify({
         product: "Product Siema",
