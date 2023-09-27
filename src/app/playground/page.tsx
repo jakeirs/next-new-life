@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
+import { getDomain } from "../lib/getDomain";
 
 interface Props {}
 
-const BlogPage: React.FC<Props> = () => {
+const PlaygroundPage: React.FC<Props> = () => {
   useEffect(() => {
-    fetch("https://localhost:3000" + "/api/playground    ", {
+    fetch(getDomain + "/api/playground    ", {
       method: "POST",
       body: JSON.stringify({
         product: "Product Siema",
@@ -17,4 +18,4 @@ const BlogPage: React.FC<Props> = () => {
   return <div>Siema</div>;
 };
 
-export default BlogPage;
+export default PlaygroundPage;
