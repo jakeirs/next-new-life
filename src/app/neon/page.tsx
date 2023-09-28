@@ -9,4 +9,6 @@ export default async function NeonConnectionPage() {
     </div>
   );
 }
-  
+
+export const runtime = "edge";
+export const prefferedRegion = "fra1";
