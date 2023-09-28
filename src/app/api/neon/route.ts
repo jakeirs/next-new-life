@@ -8,4 +8,4 @@ export async function GET(req: NextRequest) {
   return NextResponse.json(`DB latency is ${db.latency}ms`);
 }
 
-export const revalidate = 5;
+export const revalidate = 0;
