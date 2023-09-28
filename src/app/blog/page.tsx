@@ -1,5 +1,4 @@
 import { getDomain } from "@/lib/getDomain";
-import { helloWorld } from "@/lib/db";
 
 async function getData() {
   const domain = getDomain();
@@ -16,18 +15,9 @@ async function getData() {
   return res.json();
 }
 
-interface Props {}
-
-const BlogPage: React.FC<Props> = async () => {
+export default async function BlogPage() {
   // const data = await getData();
   // return <div>{JSON.stringify(data)}</div>;
 
-  const dbHellowWorld = await helloWorld();
-  console.log("dbHellowWorld", dbHellowWorld);
-  return <div>BLOG {dbHellowWorld.latency}ms</div>;
-};
-
-export default BlogPage;
-
-export const runtime = "edge";
-export const prefferedRegion = "iad1";
+  return <div>Blog</div>;
+}
