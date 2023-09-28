@@ -28,3 +28,6 @@ const BlogPage: React.FC<Props> = async () => {
 };
 
 export default BlogPage;
+
+export const runtime = "edge";
+export const prefferedRegion = "iad1";
