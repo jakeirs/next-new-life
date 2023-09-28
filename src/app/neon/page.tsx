@@ -11,3 +11,4 @@ export default async function NeonConnectionPage() {
 }
 
 export const runtime = "edge";
+export const revalidate = 0;
