@@ -1,13 +1,15 @@
-import { helloWorldDb } from "@/lib/db";
+"use client";
+import { helloWorldFromDb } from "@/lib/db";
+import { useEffect } from "react";
 
-export default async function NeonConnectionPage() {
-  const db = await helloWorldDb();
-  console.log("db", db);
-  return (
-    <div>
-      NeonConnectionPage<div>{db.latency}ms</div>
-    </div>
-  );
+export default function NeonPage() {
+  const initDbCall = async () => {
+    const dbResponse = await helloWorldFromDb();
+  };
+
+  useEffect(() => {
+    initDbCall().catch((error) => error);
+  }, []);
+
+  return <div>page</div>;
 }
-
-export const revalidate = 0;

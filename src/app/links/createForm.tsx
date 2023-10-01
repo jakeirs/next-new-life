@@ -18,6 +18,7 @@ export default function CreateForm() {
       },
       body: JSON.stringify(formKeysValues),
     };
+    console.log("asdsadasdasdasd");
 
     const response = await fetch(endpoint, options);
     const result = await response.json();

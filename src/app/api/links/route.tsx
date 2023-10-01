@@ -1,13 +1,22 @@
+import { addLinkToDb, getLinkFromDb } from "@/lib/db";
 import isValidURL from "@/lib/isValidURL";
+import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  return NextResponse.json("Link responded");
+  const dbResponse = await getLinkFromDb();
+  console.log("dbResponsedbResponsedbResponsedbResponse", dbResponse);
+
+  return NextResponse.json(dbResponse);
 }
 
 export async function POST(req: NextRequest) {
   const contentType = await req.headers.get("content-type");
   const postData = await req.json();
+  console.log(
+    "postDatapostDatapostDatapostDatapostDatapostDatapostDatapostDatapostDatapostDatapostData",
+    postData
+  );
   const validURL = await isValidURL(postData.url, [
     process.env.NEXT_PUBLIC_VERCEL_URL,
   ]);
@@ -22,6 +31,8 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
-
-  return NextResponse.json({ message: "Link POST responded", data: postData });
+  const dbResponse = await addLinkToDb(postData.url).catch((error) => {
+    new Error("Something wrong with inserting to DB");
+  });
+  return NextResponse.json(validURL, { status: 201 });
 }
