@@ -1,7 +1,8 @@
-import { timestamp, serial, text, pgTable } from "drizzle-orm/pg-core";
+import { timestamp, serial, text, pgTable, varchar } from "drizzle-orm/pg-core";
 
-export const FiutyTable = pgTable("fiuty", {
+export const LinksTable = pgTable("links", {
   id: serial("id").primaryKey().notNull(),
   url: text("url").notNull(),
+  short: varchar("short", { length: 50 }),
   createdAt: timestamp("created_at").defaultNow(),
 });

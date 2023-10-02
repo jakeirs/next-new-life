@@ -1,6 +1,7 @@
 import { neon, neonConfig } from "@neondatabase/serverless";
-import { FiutyTable } from "./schema";
+import { LinksTable } from "./schema";
 import { drizzle } from "drizzle-orm/neon-http";
+import { desc } from "drizzle-orm";
 const sql = neon(process.env.NEXT_PUBLIC_DATABASE_URL);
 
 neonConfig.fetchConnectionCache = true;
@@ -15,21 +16,27 @@ export const helloWorldFromDb = async () => {
 };
 
 async function configureDatabase() {
-  const dbResponse = await sql`CREATE TABLE IF NOT EXISTS "fiuty" (
+  const dbResponse = await sql`CREATE TABLE IF NOT EXISTS "links" (
     "id" serial PRIMARY KEY NOT NULL,
     "url" text NOT NULL,
-    "created_at" timestamp DEFAULT now(),
-    "text" text NOT NULL
+    "short" varchar(50),
+    "created_at" timestamp DEFAULT now()
   );
+  
   `;
-  console.log("dbResponse", dbResponse);
+  console.log("dbResponse CONFIGDB", dbResponse);
 }
 
 configureDatabase().catch((error) => console.log("configureDatabase ", error));
 
 export async function addLinkToDb(newUrl) {
-  const newLink = { url: newUrl, text: "Siema" };
-  return await db.insert(FiutyTable).values(newLink).returning();
+  const newLink = { url: newUrl, text: "KOPA" };
+  console.log("newLink", newLink);
+  return await db
+    .insert(LinksTable)
+    .values(newLink)
+    .returning()
+    .catch((error) => console.log("Error on trying to insert to db: ", error));
 }
 
 export async function getLinkFromDb({ limit = 10, offset = 0 } = {}) {
@@ -37,21 +44,8 @@ export async function getLinkFromDb({ limit = 10, offset = 0 } = {}) {
 
   return await db
     .select()
-    .from(FiutyTable)
+    .from(LinksTable)
     .limit(pagination.limit)
-    .offset(pagination.off);
-}
-
-export async function getModLinkFromDb({ limit = 10, offset = 0 } = {}) {
-  const pagination = { limit, offset };
-
-  return await db
-    .select({
-      myModifiedId: FiutyTable.id,
-      myUrl: FiutyTable.url,
-      timestamp: FiutyTable.createdAt,
-    })
-    .from(FiutyTable)
-    .limit(pagination.limit)
-    .offset(pagination.off);
+    .offset(pagination.off)
+    .orderBy(desc(LinksTable.createdAt));
 }

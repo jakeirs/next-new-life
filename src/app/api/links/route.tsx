@@ -13,10 +13,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const contentType = await req.headers.get("content-type");
   const postData = await req.json();
-  console.log(
-    "postDatapostDatapostDatapostDatapostDatapostDatapostDatapostDatapostDatapostDatapostData",
-    postData
-  );
+
   const validURL = await isValidURL(postData.url, [
     process.env.NEXT_PUBLIC_VERCEL_URL,
   ]);
@@ -34,5 +31,8 @@ export async function POST(req: NextRequest) {
   const dbResponse = await addLinkToDb(postData.url).catch((error) => {
     new Error("Something wrong with inserting to DB");
   });
-  return NextResponse.json(validURL, { status: 201 });
+
+  console.log("dbResponsexxxxxxxxx", dbResponse);
+
+  return NextResponse.json("dbResponse", { status: 201 });
 }

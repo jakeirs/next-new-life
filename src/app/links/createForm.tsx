@@ -5,8 +5,8 @@ import { useState } from "react";
 
 const endpoint = `${getDomain()}/api/links`;
 
-export default function CreateForm() {
-  const [result, setResult] = useState(null);
+export default function CreateForm({ didSubmit }: { didSubmit(): void }) {
+  const [result, setResult] = useState<any>(null);
   const handleForm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -22,8 +22,12 @@ export default function CreateForm() {
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
-    setResult(result?.message);
-    console.log("result", result?.message);
+    setResult(JSON.stringify(result));
+    console.log("result", result);
+
+    if (didSubmit) {
+      didSubmit();
+    }
   };
 
   return (
