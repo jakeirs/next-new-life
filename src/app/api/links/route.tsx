@@ -27,10 +27,10 @@ export async function POST(req: NextRequest) {
     );
   }
   const dbResponse = await addLinkToDb(postData.url);
-
+  const { data, status } = dbResponse;
   if (!dbResponse) {
     throw new Error("Error on inserting link to Db");
   }
 
-  return NextResponse.json(dbResponse, { status: 201 });
+  return NextResponse.json(data ? data : {}, { status: status ? status : 500 });
 }

@@ -2,7 +2,7 @@ import { neon, neonConfig } from "@neondatabase/serverless";
 import { randomShortStrings } from "./randomShortStrings";
 import { LinksTable } from "./schema";
 import { drizzle } from "drizzle-orm/neon-http";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 const sql = neon(process.env.NEXT_PUBLIC_DATABASE_URL);
 
 neonConfig.fetchConnectionCache = true;
@@ -23,20 +23,43 @@ async function configureDatabase() {
     "short" varchar(50),
     "created_at" timestamp DEFAULT now()
   );
-  
   `;
-  console.log("dbResponse CONFIGDB", dbResponse);
+  await sql`CREATE UNIQUE INDEX IF NOT EXISTS "url_idx" ON "links" ((LOWER(url)));`;
+  await sql`CREATE TABLE IF NOT EXISTS "visits" (
+    "id" serial PRIMARY KEY NOT NULL,
+    "link_id" integer NOT NULL,
+    "created_at" timestamp DEFAULT now()
+  );`;
+  await sql`  DO $$ BEGIN
+  ALTER TABLE "visits" ADD CONSTRAINT "visits_link_id_links_id_fk" FOREIGN KEY ("link_id") REFERENCES "links"("id") ON DELETE no action ON UPDATE no action;
+ EXCEPTION
+  WHEN duplicate_object THEN null;
+ END $$;
+  `;
 }
 
 configureDatabase().catch((error) => console.log("configureDatabase ", error));
 
 export async function addLinkToDb(newUrl) {
-  const newLink = { url: newUrl, short: randomShortStrings(newUrl) };
-  return await db
-    .insert(LinksTable)
-    .values(newLink)
-    .returning()
-    .catch((error) => console.log("Error on trying to insert to db: ", error));
+  const newLink = {
+    url: newUrl.toLowerCase(),
+    short: randomShortStrings(newUrl),
+  };
+  let response = [{ message: `${newUrl} is not valid. Please try again` }];
+  let status = 400;
+  try {
+    response = await db.insert(LinksTable).values(newLink).returning();
+    status = 201;
+  } catch ({ name, message }) {
+    if (
+      `${message}`.includes("duplicate key value violates unique constraint")
+    ) {
+      response = [
+        { message: `${newUrl} is had been already added in the past` },
+      ];
+    }
+  }
+  return { data: response, status };
 }
 
 export async function getLinkFromDb({ limit = 10, offset = 0 } = {}) {
@@ -48,4 +71,12 @@ export async function getLinkFromDb({ limit = 10, offset = 0 } = {}) {
     .limit(pagination.limit)
     .offset(pagination.off)
     .orderBy(desc(LinksTable.createdAt));
+}
+
+export async function getUrlBaseOnSlugFromDb(slugLinkValue) {
+  console.log(slugLinkValue, slugLinkValue);
+  return await db
+    .select()
+    .from(LinksTable)
+    .where(eq(LinksTable.short, slugLinkValue));
 }
