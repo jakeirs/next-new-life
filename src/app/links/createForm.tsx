@@ -18,12 +18,10 @@ export default function CreateForm({ didSubmit }: { didSubmit(): void }) {
       },
       body: JSON.stringify(formKeysValues),
     };
-    console.log("asdsadasdasdasd");
 
     const response = await fetch(endpoint, options);
     const result = await response.json();
     setResult(JSON.stringify(result));
-    console.log("result", result);
 
     if (didSubmit) {
       didSubmit();
@@ -38,8 +36,9 @@ export default function CreateForm({ didSubmit }: { didSubmit(): void }) {
       <input type="text" name="url" placeholder="Your url to shrten" />
       <input type="text" name="piki" placeholder="Myszka" />
       <button type="submit"> Shorten</button>
-
+      <p>Added:</p>
       <p>{result}</p>
+      <br />
     </form>
   );
 }

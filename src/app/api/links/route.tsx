@@ -5,8 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const dbResponse = await getLinkFromDb();
-  console.log("dbResponsedbResponsedbResponsedbResponse", dbResponse);
-
   return NextResponse.json(dbResponse);
 }
 
@@ -28,11 +26,11 @@ export async function POST(req: NextRequest) {
       { status: 400 }
     );
   }
-  const dbResponse = await addLinkToDb(postData.url).catch((error) => {
-    new Error("Something wrong with inserting to DB");
-  });
+  const dbResponse = await addLinkToDb(postData.url);
 
-  console.log("dbResponsexxxxxxxxx", dbResponse);
+  if (!dbResponse) {
+    throw new Error("Error on inserting link to Db");
+  }
 
-  return NextResponse.json("dbResponse", { status: 201 });
+  return NextResponse.json(dbResponse, { status: 201 });
 }
