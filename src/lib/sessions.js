@@ -34,21 +34,6 @@ export const decodeUserSession = async (jwt) => {
   return null;
 };
 
-export async function verifySession() {
-  const userId = "1";
-  const jwt = await encodeUserSession(userId);
-  const decodedUserSession = await decodeUserSession(jwt);
-
-  const user = decodedUserSession;
-  if (user === userId) {
-    console.log("verified", "userId", user);
-  }
-}
-
-verifySession()
-  .then()
-  .catch((err) => console.log("Error with session"));
-
 export async function setSessionUser(userId) {
   const newSessionValue = await encodeUserSession(userId);
   // call in route.js

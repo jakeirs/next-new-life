@@ -1,9 +1,7 @@
 import { getLinkAndVisitsFromDb, getUrlBaseOnSlugFromDb } from "@/lib/db";
-import { verifySession } from "@/lib/sessions";
 import { getDomain } from "@/lib/getDomain";
 import { notFound, redirect } from "next/navigation";
 
-verifySession;
 async function triggerVisit(linkId: any) {
   const options = {
     method: "POST",
