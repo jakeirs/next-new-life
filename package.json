@@ -15,14 +15,15 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "swr": "^2.2.4"
+    "swr": "^2.2.4",
+    "jose": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "autoprefixer": "latest",
-    "drizzle-kit": "lastest",
+    "drizzle-kit": "0.19.13",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "postcss": "latest",

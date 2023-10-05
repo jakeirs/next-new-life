@@ -13,7 +13,7 @@ export const LinksTable = pgTable(
   "links",
   {
     id: serial("id").primaryKey().notNull(),
-    url: text("url").unique().notNull(),
+    url: text("url").notNull(),
     short: varchar("short", { length: 50 }),
     createdAt: timestamp("created_at").defaultNow(),
   },
@@ -25,7 +25,7 @@ export const LinksTable = pgTable(
 );
 
 // links --> link -> has many visits
-const LinksTableRelations = relations(LinksTable, ({ many, one }) => ({
+export const LinksTableRelations = relations(LinksTable, ({ many, one }) => ({
   visits: many(VisitsTable),
 }));
 

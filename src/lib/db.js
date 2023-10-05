@@ -1,12 +1,13 @@
 import { neon, neonConfig } from "@neondatabase/serverless";
 import { randomShortStrings } from "./randomShortStrings";
-import { LinksTable } from "./schema";
+import { LinksTable, VisitsTable } from "./schema";
+import * as schema from "./schema";
 import { drizzle } from "drizzle-orm/neon-http";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, sql as sqlDriizle } from "drizzle-orm";
 const sql = neon(process.env.NEXT_PUBLIC_DATABASE_URL);
 
 neonConfig.fetchConnectionCache = true;
-const db = drizzle(sql);
+const db = drizzle(sql, { schema });
 
 export const helloWorldFromDb = async () => {
   const start = new Date();
@@ -79,4 +80,35 @@ export async function getUrlBaseOnSlugFromDb(slugLinkValue) {
     .select()
     .from(LinksTable)
     .where(eq(LinksTable.short, slugLinkValue));
+}
+
+export async function saveLinkVisit(linkIdValue) {
+  return await db
+    .insert(VisitsTable)
+    .values({ linkId: linkIdValue })
+    .returning();
+}
+
+export async function getLinkAndVisitsFromDb({ limit = 10, offset = 0 } = {}) {
+  const pagination = { limit, offset };
+
+  return await db.query.LinksTable.findMany({
+    limit: limit,
+    offset: offset,
+    orderBy: [desc(LinksTable.createdAt)],
+    columns: {
+      url: true,
+      createdAt: true,
+      short: true,
+    },
+    with: {
+      visits: {
+        limit: 10,
+        columns: {
+          createdAt: true,
+          url: true,
+        },
+      },
+    },
+  });
 }

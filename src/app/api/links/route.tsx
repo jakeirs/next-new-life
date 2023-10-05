@@ -1,9 +1,10 @@
 import { addLinkToDb, getLinkFromDb } from "@/lib/db";
 import isValidURL from "@/lib/isValidURL";
-import { error } from "console";
+import { setSessionUser } from "@/lib/sessions";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
+  setSessionUser(12323);
   const dbResponse = await getLinkFromDb();
   return NextResponse.json(dbResponse);
 }

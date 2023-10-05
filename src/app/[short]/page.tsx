@@ -1,5 +1,21 @@
-import { getUrlBaseOnSlugFromDb } from "@/lib/db";
+import { getLinkAndVisitsFromDb, getUrlBaseOnSlugFromDb } from "@/lib/db";
+import { verifySession } from "@/lib/sessions";
+import { getDomain } from "@/lib/getDomain";
 import { notFound, redirect } from "next/navigation";
+
+verifySession;
+async function triggerVisit(linkId: any) {
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ linkId }),
+  };
+  const domain = getDomain();
+  const endpoint = `${domain}/api/visists`;
+  return await fetch(endpoint, options);
+}
 
 export default async function ShortLinkPage({
   params,
@@ -7,16 +23,20 @@ export default async function ShortLinkPage({
   params: { short: string };
 }) {
   const [dbRecord] = await getUrlBaseOnSlugFromDb(params.short);
+  const [dbRecordLinkAndVisits] = await getLinkAndVisitsFromDb();
   if (!dbRecord) {
     notFound();
   }
-  const { url } = dbRecord;
+  const { url, id } = dbRecord;
   if (!url) {
     notFound();
   }
 
+  if (id) {
+    await triggerVisit(id);
+  }
+
   // redirect(url);
 
-  return <div>ShortLinkPage: {JSON.stringify(dbRecord)}</div>;
+  return <pre>{JSON.stringify(dbRecordLinkAndVisits, null, 4)}</pre>;
 }
- 
