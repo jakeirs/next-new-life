@@ -11,12 +11,13 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.6.0",
+    "@next/env": "^13.5.4",
     "drizzle-orm": "^0.28.6",
+    "jose": "latest",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "swr": "^2.2.4",
-    "jose": "latest"
+    "swr": "^2.2.4"
   },
   "devDependencies": {
     "@types/node": "latest",
