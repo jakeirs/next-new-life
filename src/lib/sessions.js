@@ -15,8 +15,6 @@ export const encodeUserSession = async (userId) => {
     .setExpirationTime(expiresAt)
     .encrypt(secret);
 
-  console.log(jwt);
-
   return jwt;
 };
 

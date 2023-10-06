@@ -21,7 +21,7 @@ export default async function ShortLinkPage({
   params: { short: string };
 }) {
   const [dbRecord] = await getUrlBaseOnSlugFromDb(params.short);
-  const [dbRecordLinkAndVisits] = await getLinkAndVisitsFromDb();
+  const [dbRecordLinkAndVisits] = await getLinkAndVisitsFromDb(params.short);
   if (!dbRecord) {
     notFound();
   }
@@ -33,6 +33,8 @@ export default async function ShortLinkPage({
   if (id) {
     await triggerVisit(id);
   }
+
+  console.log("dbRecordLinkAndVisits", dbRecordLinkAndVisits);
 
   // redirect(url);
 

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrations": "drizzle-kit generate:pg"
+    "migrations": "drizzle-kit generate:pg",
+    "genKey": "npx tsx src/lib/generateKey.js"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.6.0",
@@ -29,6 +30,7 @@
     "eslint-config-next": "latest",
     "postcss": "latest",
     "tailwindcss": "latest",
+    "tsx": "^3.13.0",
     "typescript": "latest"
   }
 }
